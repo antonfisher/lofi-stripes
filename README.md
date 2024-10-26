@@ -2,7 +2,8 @@
 
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-green.svg)](https://conventionalcommits.org)
 
-A web application for creating t-shirt prints. Using wasm and rust.
+A web application for creating lofi t-shirt prints.
+Built with js, wasm and rust.
 
 ## Example
 
@@ -16,8 +17,8 @@ make run_release
 make run_debug
 
 # clear all build artifacts and run localy:
-make run_release_clean
-make run_debug_clean
+make clean_and_run_release
+make clean_and_run_debug
 
 # watch typescript changes (useful to run in parallel):
 make watch_ts
