@@ -1,0 +1,6 @@
+{
+  "makefile.configureOnOpen": false,
+  "search.exclude": {
+    "/docs": true,
+  }
+}

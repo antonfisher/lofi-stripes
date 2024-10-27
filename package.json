@@ -1,0 +1,8 @@
+{
+  "name": "wasm-lofi-stripes",
+  "version": "0.1.0",
+  "devDependencies": {
+    "prettier": "^3.3.2",
+    "typescript": "^5.4.5"
+  }
+}
