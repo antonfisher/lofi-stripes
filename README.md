@@ -16,8 +16,8 @@ Source files are located in `./src`, the build results are in `./docs`
 
 ```bash
 # build and run locally on http://localhost:8001/:
-make run_release
-make run_debug
+make run_release # fast
+make run_debug # really slow, but with readable perf profile
 
 # clear all build artifacts and run locally:
 make clean_and_run_release
