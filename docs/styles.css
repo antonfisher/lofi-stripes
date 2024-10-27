@@ -129,6 +129,7 @@ button:disabled {
 }
 
 input {
+  /* TODO: reuse local font */
   font-family: "Raleway Dots", sans-serif;
   font-size: 16px;
   font-weight: 600;
