@@ -1,13 +1,13 @@
 import { createLogger } from "./logger.js";
 // Rust worker.
 // TODO: cache in prod.
-const worker = new Worker(`/worker.js?v=${+Date.now()}`, { type: "module" });
+const worker = new Worker(`./worker.js?v=${+Date.now()}`, { type: "module" });
 const CANVAS_PADDING = 20;
-const URL_FONT = "/data/font-raleway-dots-regular.ttf";
+const URL_FONT = "./data/font-raleway-dots-regular.ttf";
 const URL_DEMO_IMAGES = [
-    "/data/hw1fog.jpeg",
-    "/data/hw101south.jpeg",
-    "/data/hw101north.jpeg",
+    "./data/hw1fog.jpeg",
+    "./data/hw101south.jpeg",
+    "./data/hw101north.jpeg",
 ];
 const URL_RANDOM_DEMO_IMAGE = URL_DEMO_IMAGES[Math.floor(Math.random() * URL_DEMO_IMAGES.length)];
 // Stores the last rendered image blob.
