@@ -2,8 +2,11 @@
 name = "lofi_stripes"
 version = "0.1.0"
 edition = "2021"
-
-#TODO: add description, repository, license.
+description = "A rust (wasm) module of the web application for creating lofi t-shirt prints."
+authors = ["Anton Fisher <a.fschr@gmail.com>"]
+license = "MIT"
+repository = "https://github.com/antonfisher/lofi-stripes"
+homepage = "https://antonfisher.com/lofi-stripes/"
 
 [lib]
 crate-type = ["cdylib"]
@@ -18,6 +21,6 @@ once_cell = "1.20.1"
 wasm-bindgen = "0.2"
 web-sys = { version = "0.3.4", features = ["console"] }
 
-# https://rustwasm.github.io/docs/wasm-bindgen/examples/add.html
+# TODO: test: https://rustwasm.github.io/docs/wasm-bindgen/examples/add.html
 # [profile.release]
 # lto = true
