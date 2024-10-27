@@ -7,7 +7,7 @@ Built with js, wasm and rust.
 
 ## Example
 
-![photo that shows a t-shirt with a print created in the app](./docs/data/demo.jpg)
+![photo that shows a t-shirt with a print created in the app](./docs/data/demo.jpeg)
 
 ## Development
 
