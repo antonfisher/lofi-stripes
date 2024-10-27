@@ -1,0 +1,15 @@
+{
+  "name": "lofi_stripes",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "lofi_stripes_bg.wasm",
+    "lofi_stripes.js",
+    "lofi_stripes.d.ts"
+  ],
+  "main": "lofi_stripes.js",
+  "types": "lofi_stripes.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
