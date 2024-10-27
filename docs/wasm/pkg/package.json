@@ -1,13 +1,23 @@
 {
   "name": "lofi_stripes",
   "type": "module",
+  "collaborators": [
+    "Anton Fisher <a.fschr@gmail.com>"
+  ],
+  "description": "A rust (wasm) module of the web application for creating lofi t-shirt prints.",
   "version": "0.1.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/antonfisher/lofi-stripes"
+  },
   "files": [
     "lofi_stripes_bg.wasm",
     "lofi_stripes.js",
     "lofi_stripes.d.ts"
   ],
   "main": "lofi_stripes.js",
+  "homepage": "https://antonfisher.com/lofi-stripes/",
   "types": "lofi_stripes.d.ts",
   "sideEffects": [
     "./snippets/*"
