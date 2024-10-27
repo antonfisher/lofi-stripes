@@ -38,8 +38,8 @@ const BUTTON_COPY = document.getElementById("button-copy-image");
     INPUT_STRIPE_COUNT,
     INPUT_STRIPE_HEIGHT_PERCENT,
 ].forEach((el) => {
-    el.addEventListener("keyup", renderThrottled);
-    el.addEventListener("change", renderThrottled);
+    el.addEventListener("keyup", () => renderThrottled());
+    el.addEventListener("change", () => renderThrottled());
 });
 // Upload image.
 BUTTON_LOAD.addEventListener("click", () => {
@@ -91,9 +91,9 @@ BUTTON_SAVE.addEventListener("click", () => {
     downloadLink.click();
     URL.revokeObjectURL(downloadLink.href);
 });
-window.addEventListener("resize", () => {
+window.addEventListener("resize", async () => {
     resizeCanvas();
-    renderThrottled();
+    await renderThrottled({ force: true });
 });
 function indicateButtonPressedState(button, text) {
     const originalText = button.innerText;
@@ -204,7 +204,7 @@ async function renderOnCanvasFromArrayBuffer(imageBytes) {
 let isRendering = false;
 let isRerenderRequested = false;
 let renderedParams = null;
-async function renderThrottled() {
+async function renderThrottled({ force } = { force: false }) {
     setLoading("drawing");
     if (isRendering) {
         log("re-render requested");
@@ -214,7 +214,7 @@ async function renderThrottled() {
     try {
         isRendering = true;
         const params = readParams();
-        if (!isEqualParams(params, renderedParams)) {
+        if (force === true || !isEqualParams(params, renderedParams)) {
             renderedParams = params;
             await renderInWorker(params);
         }

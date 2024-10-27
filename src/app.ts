@@ -74,8 +74,8 @@ const BUTTON_COPY = document.getElementById(
   INPUT_STRIPE_COUNT,
   INPUT_STRIPE_HEIGHT_PERCENT,
 ].forEach((el) => {
-  el.addEventListener("keyup", renderThrottled);
-  el.addEventListener("change", renderThrottled);
+  el.addEventListener("keyup", () => renderThrottled());
+  el.addEventListener("change", () => renderThrottled());
 });
 
 // Upload image.
@@ -136,9 +136,9 @@ BUTTON_SAVE.addEventListener("click", () => {
   URL.revokeObjectURL(downloadLink.href);
 });
 
-window.addEventListener("resize", () => {
+window.addEventListener("resize", async () => {
   resizeCanvas();
-  renderThrottled();
+  await renderThrottled({force: true});
 });
 
 function indicateButtonPressedState(
@@ -291,7 +291,9 @@ async function renderOnCanvasFromArrayBuffer(
 let isRendering = false;
 let isRerenderRequested = false;
 let renderedParams: ParamsType | null = null;
-async function renderThrottled() {
+async function renderThrottled(
+  {force}: {force: boolean} = {force: false},
+): Promise<void> {
   setLoading("drawing");
 
   if (isRendering) {
@@ -303,7 +305,7 @@ async function renderThrottled() {
   try {
     isRendering = true;
     const params = readParams();
-    if (!isEqualParams(params, renderedParams)) {
+    if (force === true || !isEqualParams(params, renderedParams)) {
       renderedParams = params;
       await renderInWorker(params);
     }
