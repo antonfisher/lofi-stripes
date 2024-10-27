@@ -7,16 +7,19 @@ Built with js, wasm and rust.
 
 ## Example
 
-![photo that shows a t-shirt with a print from the app](./docs/data/demo.jpg)
+![photo that shows a t-shirt with a print created in the app](./docs/data/demo.jpg)
 
 ## Development
 
+Source files are located in `./src`, the build results are in `./docs`
+(to serve them using GitHub pages).
+
 ```bash
-# run localy:
+# build and run locally on http://localhost:8001/:
 make run_release
 make run_debug
 
-# clear all build artifacts and run localy:
+# clear all build artifacts and run locally:
 make clean_and_run_release
 make clean_and_run_debug
 
@@ -26,7 +29,7 @@ make watch_ts
 
 See [Makefile](./Makefile) for more commands.
 
-## Deploy
+## Deployment
 
 ```bash
 # build:
@@ -34,6 +37,10 @@ make build_release
 
 # git commit ...
 ```
+
+## Credits
+
+- [Raleway Dots font](https://fonts.google.com/specimen/Raleway+Dots/about?query=raleway+dots) designed by Matt McInerney, Pablo Impallari, Rodrigo Fuenzalida, Brenda Gallo
 
 ## License
 
