@@ -5,6 +5,8 @@
 A web application for creating lofi t-shirt prints.
 Built with js, wasm and rust.
 
+App link: [https://antonfisher.com/lofi-stripes/](https://antonfisher.com/lofi-stripes/).
+
 ## Example
 
 ![photo that shows a t-shirt with a print created in the app](./docs/data/demo.jpeg)
