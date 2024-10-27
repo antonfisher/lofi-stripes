@@ -47,19 +47,19 @@ serve:
 	python3 dev_server.py
 
 .PHONY: run_debug
-run_debug: clean_docs build_debug build_ts move_to_docs serve
+run_debug: clean_docs build_rust_debug build_ts move_to_docs serve
 	@echo "Building and running debug..."
 
 .PHONY: clean_and_run_debug
-clean_and_run_debug: clean_target clean_docs build_debug build_ts move_to_docs serve
+clean_and_run_debug: clean_target clean_docs build_rust_debug build_ts move_to_docs serve
 	@echo "Clean, build and run debug..."
 
 .PHONY: run_release
-run_release: clean_docs build_release build_ts move_to_docs serve
+run_release: clean_docs build_rust_release build_ts move_to_docs serve
 	@echo "Building and running release..."
 
 .PHONY: clean_and_run_release
-clean_and_run_release: clean_target clean_docs build_release build_ts move_to_docs serve
+clean_and_run_release: clean_target clean_docs build_rust_release build_ts move_to_docs serve
 	@echo "Clean, build and run release..."
 
 # Release
