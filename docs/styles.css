@@ -24,12 +24,12 @@ h1 {
 }
 
 header, footer {
-  width: 100vw;
+  width: 100%;
   text-align: center;
 }
 
 footer {
-  font-size: 16px;
+  font-size: 15px;
 }
 
 a {
@@ -132,6 +132,23 @@ button:focus {
   padding: 10px 20px;
   max-height: 100vh;
   overflow-y: auto;
+}
+
+@media (max-width: 600px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .left-column {
+    height: 75vh;
+    min-height: 75vh;
+  }
+
+  .right-column {
+    width: unset;
+    max-width: 100%;
+    overflow-y: unset;
+  }
 }
 
 .row {
