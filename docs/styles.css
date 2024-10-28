@@ -12,6 +12,11 @@ body {
   animation: startupBlur 0.25s ease-out;
 }
 
+@keyframes startupBlur {
+  0% {filter: blur(5px)}
+  100% {filter: blur(0px)}
+}
+
 h1 {
   font-size: 35px;
   padding: 10px 0;
@@ -30,6 +35,72 @@ footer {
 a {
   color: rgba(255, 255, 0, 0.6);
   text-decoration: none;
+}
+
+button {
+  font-family: "Raleway Dots", sans-serif;
+  color: #ffffff;
+  font-size: 16px;
+  text-transform: uppercase;
+  background: #666666;
+  outline: transparent;
+  letter-spacing: 2px;
+  font-weight: 700;
+  border: 0;
+  border-radius: 3px;
+  min-width: 100%;
+  min-height: 45px;
+  padding: 14px 14px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+}
+
+button:hover {
+  background-color: rgba(255, 255, 0, 0.6);
+}
+
+button:disabled {
+  color: #666666;
+  background-color: #363636;
+  cursor: not-allowed;
+}
+
+input {
+  /* TODO: reuse local font */
+  font-family: "Raleway Dots", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  background: #eeeeee;
+  letter-spacing: 2px;
+  border: 0;
+  border-radius: 3px;
+  padding: 0 20px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+}
+
+input[type="number"], input[type="text"] {
+  min-height: 45px;
+}
+
+input[type="number"] {
+  width: 70px;
+  min-width: 70px;
+  max-width: 70px;
+}
+
+input[type="text"] {
+  width: 100px;
+  min-width: 100px;
+  max-width: 100px;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+input:focus
+button:focus {
+  box-shadow: inset 0px 0px 0 3px rgba(69%, 69%, 0%, 0.5);
+  outline: none;
 }
 
 .container {
@@ -114,81 +185,10 @@ a {
   75% {content: "..."}
 }
 
-button {
-  font-family: "Raleway Dots", sans-serif;
-  color: #ffffff;
-  font-size: 16px;
-  text-transform: uppercase;
-  background: #666666;
-  outline: transparent;
-  letter-spacing: 2px;
-  font-weight: 700;
-  border: 0;
-  border-radius: 3px;
-  min-width: 100%;
-  min-height: 45px;
-  padding: 14px 14px;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 10px 100%, 0 calc(100% - 10px));
-}
-
-button:hover {
-  background-color: rgba(255, 255, 0, 0.6);
-}
-
-button:disabled {
-  color: #666666;
-  background-color: #363636;
-  cursor: not-allowed;
-}
-
-input {
-  /* TODO: reuse local font */
-  font-family: "Raleway Dots", sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  background: #eeeeee;
-  letter-spacing: 2px;
-  border: 0;
-  border-radius: 3px;
-  padding: 0 20px;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 10px 100%, 0 calc(100% - 10px));
-}
-
-input[type="number"], input[type="text"] {
-  min-height: 45px;
-}
-
-input[type="number"] {
-  width: 70px;
-  min-width: 70px;
-  max-width: 70px;
-}
-
-input[type="text"] {
-  width: 100px;
-  min-width: 100px;
-  max-width: 100px;
-}
-
-input[type="file"] {
-  display: none;
-}
-
-input:focus
-button:focus {
-  box-shadow: inset 0px 0px 0 3px rgba(69%, 69%, 0%, 0.5);
-  outline: none;
-}
-
 .arrows {
   justify-content: center;
   color: #444444;
   font-size: 11px;
-}
-
-@keyframes startupBlur {
-  0% {filter: blur(5px)}
-  100% {filter: blur(0px)}
 }
 
 ::selection {
