@@ -1,7 +1,7 @@
 {
   "makefile.configureOnOpen": false,
   "search.exclude": {
-    "/docs": true,
+    "/docs/*.js": true,
   },
   "rust-analyzer.linkedProjects": [
     "./src/wasm/Cargo.toml"
