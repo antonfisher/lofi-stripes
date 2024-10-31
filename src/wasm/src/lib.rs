@@ -88,7 +88,7 @@ pub fn draw_image(
     font_size: f32,
     stripe_count: u32,
     stripe_height_percent: u32,
-) -> Vec<u8> {
+) -> Result<Vec<u8>, String> {
     log!("start...");
     log!("params: text_top: {}", text_top);
     log!("params: text_bottom: {}", text_bottom);
@@ -96,15 +96,21 @@ pub fn draw_image(
     log!("params: stripe_count: {}", stripe_count);
     log!("params: stripe_height_percent: {}", stripe_height_percent);
 
-    let image_lock = IMAGE.lock().expect("rust: failed to lock img mutex");
+    let image_lock = IMAGE.lock().or_else(|err| {
+        log!("failed to lock img mutex: {}", err);
+        Err(format!("rust: failed to lock img mutex: {}", err))
+    })?;
+
     log!("image loaded");
 
     // Clone the original image from the lock.
     let mut img = RgbaImage::new(image_lock.width(), image_lock.height());
     // The fist argument, `&*image_lock` is the reference to the inner
     // `RgbaImage` dereferenced from `MutexGuard`.
-    img.copy_from(&*image_lock, 0, 0)
-        .expect("rust: failed to copy image data");
+    img.copy_from(&*image_lock, 0, 0).or_else(|err| {
+        log!("failed to copy image data: {}", err);
+        Err(format!("rust: failed to copy image data: {}", err))
+    })?;
 
     // Drawing stripes.
     draw_transparent_stripes_mut(&mut img, stripe_count, stripe_height_percent);
@@ -118,12 +124,16 @@ pub fn draw_image(
     let mut result_cursor = Cursor::new(&mut result_buffer);
     log!("result cursor created");
 
-    // Write the modified image to the cursor
+    // Write the modified image to the cursor.
+    // TODO: extra heavy.
     img.write_to(&mut result_cursor, ImageFormat::Png)
-        .expect("rust: failed to write image to buffer");
-    log!("png written"); // TODO: extra heavy.
+        .or_else(|err| {
+            log!("failed to write image to buffer: {}", err);
+            Err(format!("rust: failed to write image to buffer: {}", err))
+        })?;
+    log!("png written");
 
-    result_buffer
+    return Ok(result_buffer);
 }
 
 fn draw_transparent_stripes_mut(

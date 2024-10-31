@@ -158,6 +158,11 @@ export function draw_image(text_top, text_bottom, font_size, stripe_count, strip
         wasm.draw_image(retptr, ptr0, len0, ptr1, len1, font_size, stripe_count, stripe_height_percent);
         var r0 = getInt32Memory0()[retptr / 4 + 0];
         var r1 = getInt32Memory0()[retptr / 4 + 1];
+        var r2 = getInt32Memory0()[retptr / 4 + 2];
+        var r3 = getInt32Memory0()[retptr / 4 + 3];
+        if (r3) {
+            throw takeObject(r2);
+        }
         var v3 = getArrayU8FromWasm0(r0, r1).slice();
         wasm.__wbindgen_free(r0, r1 * 1, 1);
         return v3;

@@ -375,7 +375,7 @@ function makeWorkerOnMessageHandler(
           reject(new Error(`Unsupported command: ${command}`));
       }
     } else {
-      err(`response from worker: command:${command} error:`, error);
+      err(`worker command:${command} failed with error:`, error);
       reject(error);
     }
   };
@@ -452,7 +452,7 @@ window.addEventListener("load", async () => {
     await renderThrottled();
     log("demo rendered");
   } catch (e) {
-    err("Failed to start the app: ", e);
+    err("Failed to start the app:", e);
   }
 });
 
