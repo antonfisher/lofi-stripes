@@ -17,9 +17,9 @@ macro_rules! log {
 
 const OUTLINE_SIZE: f32 = 0.02;
 const TEXT_PADDING: f32 = 0.01;
-const COLOR_TRANSPARENT: Rgba<u8> = Rgba([0, 0, 0, 0]);
 const COLOR_TEXT: Rgba<u8> = Rgba([255, 255, 255, 255]);
 const COLOR_OUTLINE: Rgba<u8> = Rgba([0, 0, 0, 255]);
+const COLOR_TRANSPARENT: Rgba<u8> = Rgba([0, 0, 0, 0]);
 
 static FONT: Lazy<Mutex<Vec<u8>>> = Lazy::new(|| Mutex::new(Vec::new()));
 static IMAGE: Lazy<Mutex<RgbaImage>> = Lazy::new(|| Mutex::new(RgbaImage::new(0, 0)));
@@ -28,17 +28,16 @@ static IMAGE: Lazy<Mutex<RgbaImage>> = Lazy::new(|| Mutex::new(RgbaImage::new(0,
 pub fn set_font(font_bytes: Vec<u8>) {
     log!("set_font: size: {}", font_bytes.len());
 
-    // Do not panic.
     let mut font = match FONT.lock() {
         Ok(guard) => guard,
         Err(poisoned) => {
             log!("set_font: mutex poisoned, recovering");
-            // Access potentially inconsistent data anyway.
+            // Still access potentially inconsistent data.
             poisoned.into_inner()
         }
     };
 
-    // Clear the `Vec<u8>` vector first if necessary.
+    // Clear the `Vec<u8>` vector first.
     font.clear();
 
     // Replace the font data.
@@ -46,11 +45,12 @@ pub fn set_font(font_bytes: Vec<u8>) {
 }
 
 #[wasm_bindgen]
-pub fn set_image(image_bytes: Vec<u8>) {
+pub fn set_image(image_bytes: Vec<u8>) -> Result<(), String> {
     log!("set_image: size: {}", image_bytes.len());
 
     // Guess image format.
-    let format = image::guess_format(&image_bytes).expect("set_image: failed to guess format");
+    let format = image::guess_format(&image_bytes)
+        .or_else(|err| Err(format!("set_image: failed to guess format: {}", err)))?;
     log!("set_image: image format: {:?}", format);
 
     // Create a Cursor to read from the Uint8Array without copying data.
@@ -58,7 +58,8 @@ pub fn set_image(image_bytes: Vec<u8>) {
     log!("set_image: cursor created");
 
     // Load the image from the cursor.
-    let img = image::load(cursor, format).expect("set_image: failed to load image");
+    let img = image::load(cursor, format)
+        .or_else(|err| Err(format!("set_image: failed to load image: {}", err)))?;
     log!("set_image: image loaded");
 
     // TODO: need this to modify individual pixel colors?
@@ -77,6 +78,8 @@ pub fn set_image(image_bytes: Vec<u8>) {
 
     // Replace the img data.
     *img = new_img;
+
+    Ok(())
 }
 
 // TODO: make to accept Uint8Array only.
@@ -96,27 +99,28 @@ pub fn draw_image(
     log!("params: stripe_count: {}", stripe_count);
     log!("params: stripe_height_percent: {}", stripe_height_percent);
 
-    let image_lock = IMAGE.lock().or_else(|err| {
-        log!("failed to lock img mutex: {}", err);
-        Err(format!("rust: failed to lock img mutex: {}", err))
-    })?;
-
+    let image_lock = IMAGE
+        .lock()
+        .or_else(|err| Err(format!("draw_image: failed to lock img mutex: {}", err)))?;
+    if image_lock.is_empty() {
+        return Err("draw_image: loaded image is empty".to_string());
+    }
     log!("image loaded");
 
     // Clone the original image from the lock.
     let mut img = RgbaImage::new(image_lock.width(), image_lock.height());
     // The fist argument, `&*image_lock` is the reference to the inner
     // `RgbaImage` dereferenced from `MutexGuard`.
-    img.copy_from(&*image_lock, 0, 0).or_else(|err| {
-        log!("failed to copy image data: {}", err);
-        Err(format!("rust: failed to copy image data: {}", err))
-    })?;
+    img.copy_from(&*image_lock, 0, 0)
+        .or_else(|err| Err(format!("draw_image: failed to copy image data: {}", err)))?;
+    log!("image copied");
 
     // Drawing stripes.
     draw_transparent_stripes_mut(&mut img, stripe_count, stripe_height_percent);
     log!("stripes drawn");
 
-    expand_and_draw_text_mut(&mut img, text_top, text_bottom, font_size);
+    expand_and_draw_text_mut(&mut img, text_top, text_bottom, font_size)
+        .or_else(|err| Err(format!("draw_image: {}", err)))?;
     log!("text added");
 
     // Create a Cursor to write the image to a buffer
@@ -128,12 +132,14 @@ pub fn draw_image(
     // TODO: extra heavy.
     img.write_to(&mut result_cursor, ImageFormat::Png)
         .or_else(|err| {
-            log!("failed to write image to buffer: {}", err);
-            Err(format!("rust: failed to write image to buffer: {}", err))
+            Err(format!(
+                "draw_image: failed to write image to buffer: {}",
+                err
+            ))
         })?;
     log!("png written");
 
-    return Ok(result_buffer);
+    Ok(result_buffer)
 }
 
 fn draw_transparent_stripes_mut(
@@ -182,14 +188,29 @@ fn expand_and_draw_text_mut(
     text_top: &str,
     text_bottom: &str,
     font_size: f32,
-) {
+) -> Result<(), String> {
     if text_top.len() == 0 && text_bottom.len() == 0 {
-        return;
+        return Ok(());
     }
 
-    let font_lock = FONT.lock().expect("rust: failed to lock font mutex");
-    let font = FontRef::try_from_slice(&font_lock).expect("rust: failed to load font");
+    let font_lock = FONT.lock().or_else(|err| {
+        Err(format!(
+            "expand_and_draw_text_mut: failed to lock font mutex: {}",
+            err
+        ))
+    })?;
+    if font_lock.is_empty() {
+        return Err("expand_and_draw_text_mut: font is empty".to_string());
+    }
     log!("font loaded");
+
+    let font = FontRef::try_from_slice(&font_lock).or_else(|err| {
+        Err(format!(
+            "expand_and_draw_text_mut: failed to create font: {}",
+            err
+        ))
+    })?;
+    log!("font created");
 
     // Calculate text height to expand the image.
     let sample_text = if text_top.len() > 0 {
@@ -239,6 +260,7 @@ fn expand_and_draw_text_mut(
             text_top,
         );
     }
+
     if text_bottom.len() > 0 {
         let y = (img.height() - text_height) as i32;
         draw_spaced_text_with_outline_mut(
@@ -251,6 +273,8 @@ fn expand_and_draw_text_mut(
             text_bottom,
         );
     }
+
+    Ok(())
 }
 
 fn expand_image_mut(img: &mut RgbaImage, top: u32, bottom: u32) {
