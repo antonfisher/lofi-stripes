@@ -66,17 +66,30 @@ const BUTTON_COPY = document.getElementById(
   "button-copy-image",
 ) as HTMLButtonElement;
 
-// Input listeners.
-[
-  INPUT_TEXT_TOP,
-  INPUT_TEXT_BOTTOM,
-  INPUT_FONT_SIZE,
-  INPUT_STRIPE_COUNT,
-  INPUT_STRIPE_HEIGHT_PERCENT,
-].forEach((el) => {
-  el.addEventListener("keyup", () => renderThrottled());
-  el.addEventListener("change", () => renderThrottled());
-});
+function enableUI() {
+  window.addEventListener("resize", handleResize);
+
+  [
+    INPUT_TEXT_TOP,
+    INPUT_TEXT_BOTTOM,
+    INPUT_FONT_SIZE,
+    INPUT_STRIPE_COUNT,
+    INPUT_STRIPE_HEIGHT_PERCENT,
+  ].forEach((el) => {
+    el.disabled = false;
+    el.addEventListener("keyup", handleInput);
+    el.addEventListener("change", handleInput);
+  });
+}
+
+function handleInput() {
+  renderThrottled();
+}
+
+function handleResize() {
+  resizeCanvas();
+  renderThrottled({force: true});
+}
 
 // Upload image.
 BUTTON_LOAD.addEventListener("click", () => {
@@ -84,6 +97,7 @@ BUTTON_LOAD.addEventListener("click", () => {
   INPUT_LOAD.click();
 });
 INPUT_LOAD.addEventListener("change", (event) => {
+  setLoading("loading");
   const target = event.target as HTMLInputElement;
   const file = target.files?.[0];
 
@@ -96,7 +110,7 @@ INPUT_LOAD.addEventListener("change", (event) => {
         command: "set_image",
         data: {arrayBuffer: imageArrayBuffer},
       });
-      renderThrottled();
+      renderThrottled({force: true});
     };
     reader.readAsArrayBuffer(file);
   }
@@ -134,11 +148,6 @@ BUTTON_SAVE.addEventListener("click", () => {
   downloadLink.click();
 
   URL.revokeObjectURL(downloadLink.href);
-});
-
-window.addEventListener("resize", async () => {
-  resizeCanvas();
-  await renderThrottled({force: true});
 });
 
 function indicateButtonPressedState(
@@ -421,15 +430,15 @@ window.addEventListener("load", async () => {
   try {
     setLoading("loading");
 
+    // TODO: make this ping wait for worker init?
+    await sendAndReceiveFromWorker({command: "ping"});
+
     // Fetch font and demo image.
     const stopTimer = startTimer("loading font / demo image");
     let [fontArrayBuffer, imageArrayBuffer] = await Promise.all([
       fetchAsArrayBuffer(URL_FONT),
       fetchAsArrayBuffer(URL_RANDOM_DEMO_IMAGE),
     ]);
-
-    // TODO: make this ping wait for worker init?
-    await sendAndReceiveFromWorker({command: "ping"});
 
     log("font size:", fontArrayBuffer.byteLength, "bytes");
     await sendAndReceiveFromWorker({
@@ -451,6 +460,9 @@ window.addEventListener("load", async () => {
     // Render demo.
     await renderThrottled();
     log("demo rendered");
+
+    enableUI();
+    log("ui is ready");
   } catch (e) {
     err("Failed to start the app:", e);
   }
