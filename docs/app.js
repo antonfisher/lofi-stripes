@@ -120,7 +120,8 @@ function resizeCanvas() {
     CANVAS.width = parent.clientWidth - 2 * CANVAS_PADDING;
     CANVAS.height = parent.clientHeight - 2 * CANVAS_PADDING;
 }
-// TODO: add `setError`
+// TODO: add `setError`.
+// TODO: add/remove loading mask.
 function setLoading(text) {
     const isLoading = text != null;
     BUTTON_LOAD.disabled = isLoading;
@@ -312,15 +313,15 @@ function makePromise() {
 }
 window.addEventListener("load", async () => {
     try {
-        setLoading("loading");
+        setLoading("loading: worker");
         // TODO: make this ping wait for worker init?
         await sendAndReceiveFromWorker({ command: "ping" });
         // Fetch font and demo image.
         const stopTimer = startTimer("loading font / demo image");
-        let [fontArrayBuffer, imageArrayBuffer] = await Promise.all([
-            fetchAsArrayBuffer(URL_FONT),
-            fetchAsArrayBuffer(URL_RANDOM_DEMO_IMAGE),
-        ]);
+        setLoading("loading: font");
+        let fontArrayBuffer = await fetchAsArrayBuffer(URL_FONT);
+        setLoading("loading: demo image");
+        let imageArrayBuffer = await fetchAsArrayBuffer(URL_RANDOM_DEMO_IMAGE);
         log("font size:", fontArrayBuffer.byteLength, "bytes");
         await sendAndReceiveFromWorker({
             command: "set_font",
