@@ -13,8 +13,12 @@ body {
 }
 
 @keyframes startupBlur {
-  0% {filter: blur(5px)}
-  100% {filter: blur(0px)}
+  0% {
+    filter: blur(5px);
+  }
+  100% {
+    filter: blur(0px);
+  }
 }
 
 h1 {
@@ -23,7 +27,8 @@ h1 {
   margin: 0;
 }
 
-header, footer {
+header,
+footer {
   width: 100%;
   text-align: center;
 }
@@ -78,7 +83,8 @@ input {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 10px 100%, 0 calc(100% - 10px));
 }
 
-input[type="number"], input[type="text"] {
+input[type="number"],
+input[type="text"] {
   min-height: 45px;
 }
 
@@ -98,8 +104,7 @@ input[type="file"] {
   display: none;
 }
 
-input:focus
-button:focus {
+input:focus button:focus {
   box-shadow: inset 0px 0px 0 3px rgba(69%, 69%, 0%, 0.5);
   outline: none;
 }
@@ -179,7 +184,7 @@ button:focus {
   align-items: center;
   font-weight: 400;
   font-style: normal;
-  font-size: 32px;
+  font-size: 22px;
   color: #333;
   transition: opacity 0.5s ease;
 }
@@ -190,17 +195,25 @@ button:focus {
   border-radius: 3px;
 }
 
-#loading-mask #loading-mask-text::after,
-#loading-mask #loading-mask-text::before {
+#loading-mask #loading-mask-text::before,
+#loading-mask #loading-mask-text::after {
   content: " ";
   animation: dots 3s steps(1, end) infinite;
 }
 
 @keyframes dots {
-  0% {content: " "}
-  25% {content: "."}
-  50% {content: ".."}
-  75% {content: "..."}
+  0% {
+    content: " ";
+  }
+  25% {
+    content: ".";
+  }
+  50% {
+    content: "..";
+  }
+  75% {
+    content: "...";
+  }
 }
 
 .arrows {
