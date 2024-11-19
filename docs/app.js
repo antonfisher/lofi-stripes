@@ -17,9 +17,6 @@ let lastImageBlob = null;
 const { log, err, startTimer } = createLogger("js-main");
 // Canvas.
 const CANVAS = document.getElementById("image-canvas");
-// Loading mask.
-const LOADING_MASK = document.getElementById("loading-mask");
-const LOADING_MASK_TEXT = document.getElementById("loading-mask-text");
 // Inputs.
 const INPUT_TEXT_TOP = document.getElementById("input-text-top");
 const INPUT_TEXT_BOTTOM = document.getElementById("input-text-bottom");
@@ -121,16 +118,32 @@ function resizeCanvas() {
     CANVAS.height = parent.clientHeight - 2 * CANVAS_PADDING;
 }
 // TODO: add `setError`.
-// TODO: add/remove loading mask.
 function setLoading(text) {
     const isLoading = text != null;
     BUTTON_LOAD.disabled = isLoading;
     BUTTON_COPY.disabled = isLoading;
     BUTTON_SAVE.disabled = isLoading;
-    LOADING_MASK.style.opacity = isLoading ? "0.8" : "0";
-    if (text != null) {
-        LOADING_MASK_TEXT.innerHTML = text;
+    let loadingMask = document.getElementById("loading-mask");
+    let loadingMaskText = document.getElementById("loading-mask-text");
+    if (!isLoading) {
+        loadingMask?.remove();
+        loadingMaskText?.remove();
+        return;
     }
+    if (loadingMask == null || loadingMaskText == null) {
+        // Create this:
+        // <div id="loading-mask">
+        //   <span id="loading-mask-text">loading</span>
+        // </div>
+        loadingMask = document.createElement("div");
+        loadingMask.id = "loading-mask";
+        loadingMaskText = document.createElement("span");
+        loadingMaskText.id = "loading-mask-text";
+        loadingMask.appendChild(loadingMaskText);
+        CANVAS.parentElement?.appendChild(loadingMask);
+    }
+    loadingMask.style.opacity = "0.8";
+    loadingMaskText.innerHTML = text;
 }
 async function fetchAsArrayBuffer(url) {
     const response = await fetch(url);
