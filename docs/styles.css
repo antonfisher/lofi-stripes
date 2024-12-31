@@ -64,18 +64,20 @@ button:hover {
 }
 
 input:disabled,
-button:disabled {
+button:disabled,
+select:disabled {
   color: #666666;
   background-color: #363636;
   cursor: wait;
 }
 
-input {
+input,
+select {
   /* TODO: reuse local font */
   font-family: "Raleway Dots", sans-serif;
   font-size: 16px;
   font-weight: 600;
-  background: #eeeeee;
+  background-color: #eeeeee;
   letter-spacing: 2px;
   border: 0;
   border-radius: 3px;
@@ -84,7 +86,8 @@ input {
 }
 
 input[type="number"],
-input[type="text"] {
+input[type="text"],
+select {
   min-height: 45px;
 }
 
@@ -104,7 +107,19 @@ input[type="file"] {
   display: none;
 }
 
-input:focus button:focus {
+select {
+  width: 110px;
+  min-width: 110px;
+  max-width: 110px;
+  appearance: none;
+  background: url('data:image/svg+xml;utf8,<svg fill="%23666666" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>')
+    no-repeat right 5px center;
+  background-color: #eeeeee;
+}
+
+input:focus,
+button:focus,
+select:focus {
   box-shadow: inset 0px 0px 0 3px rgba(69%, 69%, 0%, 0.5);
   outline: none;
 }

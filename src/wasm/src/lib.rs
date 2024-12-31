@@ -91,13 +91,15 @@ pub fn draw_image(
     font_size: f32,
     stripe_count: u32,
     stripe_height_percent: u32,
+    rotate_angle: u32,
 ) -> Result<Vec<u8>, String> {
-    log!("start...");
+    log!("draw_image...");
     log!("params: text_top: {}", text_top);
     log!("params: text_bottom: {}", text_bottom);
     log!("params: font_size: {}", font_size);
     log!("params: stripe_count: {}", stripe_count);
     log!("params: stripe_height_percent: {}", stripe_height_percent);
+    log!("params: rotate angle: {}", rotate_angle);
 
     let image_lock = IMAGE
         .lock()
@@ -118,6 +120,18 @@ pub fn draw_image(
     img.copy_from(&*image_lock, 0, 0)
         .or_else(|err| Err(format!("draw_image: failed to copy image data: {}", err)))?;
     log!("image copied");
+
+    // Rotate the image.
+    if rotate_angle == 90 || rotate_angle == 180 || rotate_angle == 270 {
+        if rotate_angle == 90 {
+            img = image::imageops::rotate90(&img);
+        } else if rotate_angle == 180 {
+            img = image::imageops::rotate180(&img);
+        } else if rotate_angle == 270 {
+            img = image::imageops::rotate270(&img);
+        }
+        log!("image rotated");
+    }
 
     // Drawing stripes.
     draw_transparent_stripes_mut(&mut img, stripe_count, stripe_height_percent);

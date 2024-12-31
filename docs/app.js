@@ -23,6 +23,7 @@ const INPUT_TEXT_BOTTOM = document.getElementById("input-text-bottom");
 const INPUT_FONT_SIZE = document.getElementById("input-number-font-size");
 const INPUT_STRIPE_COUNT = document.getElementById("input-number-stripe-count");
 const INPUT_STRIPE_HEIGHT_PERCENT = document.getElementById("input-number-stripe-height-percent");
+const INPUT_ROTATE_ANGLE = document.getElementById("input-number-rotate-angle");
 const INPUT_LOAD = document.getElementById("input-load-image");
 const BUTTON_LOAD = document.getElementById("button-load-image");
 const BUTTON_SAVE = document.getElementById("button-save-image");
@@ -40,6 +41,8 @@ function enableUI() {
         el.addEventListener("keyup", handleInput);
         el.addEventListener("change", handleInput);
     });
+    INPUT_ROTATE_ANGLE.disabled = false;
+    INPUT_ROTATE_ANGLE.addEventListener("change", handleInput);
 }
 function handleInput() {
     renderThrottled();
@@ -160,6 +163,7 @@ function readParams() {
         fontSize: Math.max(parseInt(INPUT_FONT_SIZE.value, 10) || 0, 1),
         stripeCount: Math.max(parseInt(INPUT_STRIPE_COUNT.value, 10) || 0, 1),
         stripeHeightPercent: Math.max(parseInt(INPUT_STRIPE_HEIGHT_PERCENT.value, 10) || 0, 1),
+        rotateAngle: parseInt(INPUT_ROTATE_ANGLE.value, 10) || 0,
     };
 }
 function isEqualParams(params1, params2) {

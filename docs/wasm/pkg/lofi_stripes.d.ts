@@ -14,9 +14,10 @@ export function set_image(image_bytes: Uint8Array): void;
 * @param {number} font_size
 * @param {number} stripe_count
 * @param {number} stripe_height_percent
+* @param {number} rotate_angle
 * @returns {Uint8Array}
 */
-export function draw_image(text_top: string, text_bottom: string, font_size: number, stripe_count: number, stripe_height_percent: number): Uint8Array;
+export function draw_image(text_top: string, text_bottom: string, font_size: number, stripe_count: number, stripe_height_percent: number, rotate_angle: number): Uint8Array;
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
@@ -24,7 +25,7 @@ export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly set_font: (a: number, b: number) => void;
   readonly set_image: (a: number, b: number, c: number) => void;
-  readonly draw_image: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => void;
+  readonly draw_image: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number) => void;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;

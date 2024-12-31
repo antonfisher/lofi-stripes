@@ -73,7 +73,7 @@ function commandSetImage({ arrayBuffer }) {
 }
 function commandDrawImage({ params, }) {
     const stopTimer = startTimer("drawing image");
-    const resultImageBytes = draw_image(params.textTop, params.textBottom, params.fontSize, params.stripeCount, params.stripeHeightPercent);
+    const resultImageBytes = draw_image(params.textTop, params.textBottom, params.fontSize, params.stripeCount, params.stripeHeightPercent, params.rotateAngle);
     stopTimer();
     return resultImageBytes;
 }

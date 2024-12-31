@@ -155,16 +155,17 @@ function getArrayU8FromWasm0(ptr, len) {
 * @param {number} font_size
 * @param {number} stripe_count
 * @param {number} stripe_height_percent
+* @param {number} rotate_angle
 * @returns {Uint8Array}
 */
-export function draw_image(text_top, text_bottom, font_size, stripe_count, stripe_height_percent) {
+export function draw_image(text_top, text_bottom, font_size, stripe_count, stripe_height_percent, rotate_angle) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         const ptr0 = passStringToWasm0(text_top, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         const len0 = WASM_VECTOR_LEN;
         const ptr1 = passStringToWasm0(text_bottom, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         const len1 = WASM_VECTOR_LEN;
-        wasm.draw_image(retptr, ptr0, len0, ptr1, len1, font_size, stripe_count, stripe_height_percent);
+        wasm.draw_image(retptr, ptr0, len0, ptr1, len1, font_size, stripe_count, stripe_height_percent, rotate_angle);
         var r0 = getInt32Memory0()[retptr / 4 + 0];
         var r1 = getInt32Memory0()[retptr / 4 + 1];
         var r2 = getInt32Memory0()[retptr / 4 + 2];

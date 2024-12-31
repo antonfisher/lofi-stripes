@@ -105,6 +105,7 @@ function commandDrawImage({
     params.fontSize,
     params.stripeCount,
     params.stripeHeightPercent,
+    params.rotateAngle,
   );
   stopTimer();
   return resultImageBytes;

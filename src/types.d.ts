@@ -4,6 +4,7 @@ export type ParamsType = {
   fontSize: number;
   stripeCount: number;
   stripeHeightPercent: number;
+  rotateAngle: number;
 };
 
 export type WorkerRequestSetArrayBufferDataType = {

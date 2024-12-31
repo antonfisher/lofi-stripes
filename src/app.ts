@@ -47,6 +47,9 @@ const INPUT_STRIPE_COUNT = document.getElementById(
 const INPUT_STRIPE_HEIGHT_PERCENT = document.getElementById(
   "input-number-stripe-height-percent",
 ) as HTMLInputElement;
+const INPUT_ROTATE_ANGLE = document.getElementById(
+  "input-number-rotate-angle",
+) as HTMLInputElement;
 const INPUT_LOAD = document.getElementById(
   "input-load-image",
 ) as HTMLInputElement;
@@ -74,6 +77,9 @@ function enableUI() {
     el.addEventListener("keyup", handleInput);
     el.addEventListener("change", handleInput);
   });
+
+  INPUT_ROTATE_ANGLE.disabled = false;
+  INPUT_ROTATE_ANGLE.addEventListener("change", handleInput);
 }
 
 function handleInput() {
@@ -226,6 +232,7 @@ function readParams(): ParamsType {
       parseInt(INPUT_STRIPE_HEIGHT_PERCENT.value, 10) || 0,
       1,
     ),
+    rotateAngle: parseInt(INPUT_ROTATE_ANGLE.value, 10) || 0,
   };
 }
 
