@@ -105,7 +105,11 @@ pub fn draw_image(
     if image_lock.is_empty() {
         return Err("draw_image: loaded image is empty".to_string());
     }
-    log!("image loaded");
+    log!(
+        "image loaded: width:{}, height:{}",
+        image_lock.width(),
+        image_lock.height()
+    );
 
     // Clone the original image from the lock.
     let mut img = RgbaImage::new(image_lock.width(), image_lock.height());
