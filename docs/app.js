@@ -94,10 +94,11 @@ BUTTON_SAVE.addEventListener("click", () => {
         return;
     }
     const downloadLink = document.createElement("a");
-    downloadLink.href = URL.createObjectURL(lastImageBlob);
+    const url = URL.createObjectURL(lastImageBlob);
+    downloadLink.href = url;
     downloadLink.download = "image-with-stripes.png";
     downloadLink.click();
-    URL.revokeObjectURL(downloadLink.href);
+    URL.revokeObjectURL(url);
 });
 function indicateButtonPressedState(button, text) {
     const originalText = button.innerText;
@@ -190,7 +191,10 @@ async function renderOnCanvasFromArrayBuffer(imageBytes) {
     const url = URL.createObjectURL(imageBlob);
     const image = new Image();
     image.src = url;
-    image.onerror = reject;
+    image.onerror = (e) => {
+        URL.revokeObjectURL(url);
+        reject(e);
+    };
     image.onload = () => {
         const canvasWidth = CANVAS.width;
         const canvasHeight = CANVAS.height;
@@ -210,6 +214,7 @@ async function renderOnCanvasFromArrayBuffer(imageBytes) {
         const drawY = (canvasHeight - drawHeight) / 2;
         const ctx = CANVAS.getContext("2d");
         if (ctx == null) {
+            URL.revokeObjectURL(url);
             reject("Failed to get canvas context");
             return;
         }
