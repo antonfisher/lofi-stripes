@@ -7,6 +7,8 @@ import type {
   WorkerResponseType,
 } from "./types.d.ts";
 
+//TODO: add drag-n-drop support.
+
 // Rust worker.
 // TODO: cache in prod.
 const worker = new Worker(`./worker.js?v=${+Date.now()}`, {type: "module"});
